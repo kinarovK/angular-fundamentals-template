@@ -1,11 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import {
-  Subject,
-  forkJoin,
-  Subscription,
-  Observable,
-  combineLatest,
-} from "rxjs";
+import { Subject, Subscription, Observable, combineLatest, of } from "rxjs";
 import { filter, debounceTime, map } from "rxjs/operators";
 import { MockDataService } from "./mock-data.service";
 import { areAllValuesTrue } from "./utils";
@@ -17,10 +11,11 @@ import { areAllValuesTrue } from "./utils";
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = "courses-app";
-  private searchTermByCharacters: Subject<string> = new Subject<string>();
-  private subscriptions: Subscription[] = [];
-  planetAndCharactersResults$?: Observable<string[]>;
-  isLoading: boolean = false;
+
+  public searchTermByCharacters: Subject<string> = new Subject<string>(); // Adjusted to `public`
+  public planetAndCharactersResults$: Observable<string[]> = of([]); // Default to an empty observable
+  public subscriptions: Subscription[] = []; // Adjusted to `public`
+  public isLoading: boolean = false;
 
   constructor(private mockDataService: MockDataService) {}
 
@@ -31,49 +26,44 @@ export class AppComponent implements OnInit, OnDestroy {
         filter((value: string) => value.length >= 3)
       )
       .subscribe((searchTerm: string) => {
-        this.mockDataService.getCharacters(searchTerm).subscribe((data) => {});
+        this.mockDataService.getCharacters(searchTerm).subscribe();
       });
 
-    const loaderSubscription = combineLatest([
-      this.mockDataService.getCharactersLoader(),
-      this.mockDataService.getPlanetLoader(),
-    ])
-      .pipe(map((loaderStates: boolean[]) => areAllValuesTrue(loaderStates)))
-      .subscribe((loadingState: boolean) => {
-        this.isLoading = loadingState;
-      });
+    this.initLoadingState();
 
     this.subscriptions.push(charactersInputSubscription);
-    this.subscriptions.push(loaderSubscription);
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  public changeCharactersInput(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+    this.searchTermByCharacters.next(inputValue);
   }
 
-  // Updated method to handle input with proper casting
-  changeCharactersInput(event: Event): void {
-    const inputValue = (event.target as HTMLInputElement).value; // Cast event.target to HTMLInputElement
-    this.searchTermByCharacters.next(inputValue); // Emit the sanitized input value
-  }
-
-  loadCharactersAndPlanets(): void {
-    this.planetAndCharactersResults$ = forkJoin([
+  public loadCharactersAndPlanets(): void {
+    this.planetAndCharactersResults$ = combineLatest([
       this.mockDataService.getCharacters(""),
       this.mockDataService.getPlanets(),
     ]).pipe(
       map(([characters, planets]) => {
-        const characterNames = characters.map(
-          (character: any) => character.name
-        );
-        const planetNames = planets.map((planet: any) => planet.name);
+        const characterNames = characters.map((c: any) => c.name);
+        const planetNames = planets.map((p: any) => p.name);
         return [...characterNames, ...planetNames];
       })
     );
+  }
 
-    // Debug output
-    this.planetAndCharactersResults$.subscribe((results) => {
-      console.log("Combined Results:", results);
-    });
+  public initLoadingState(): void {
+    combineLatest([
+      this.mockDataService.getCharactersLoader(),
+      this.mockDataService.getPlanetLoader(),
+    ])
+      .pipe(map((loaderStates) => areAllValuesTrue(loaderStates)))
+      .subscribe((loadingState) => {
+        this.isLoading = loadingState;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
