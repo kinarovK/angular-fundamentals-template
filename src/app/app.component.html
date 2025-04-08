@@ -1,11 +1,34 @@
 <app-header></app-header>
 <div class="app-root">
   <!-- Search component -->
-  <!--<app-search></app-search>-->
+  <div class="search-section">
+    <input
+      type="text"
+      placeholder="Search for Characters"
+      (input)="changeCharactersInput($event)"
+    />
+  </div>
 
   <!-- Info component -->
   <!--<app-info></app-info>-->
+  <div class="actions">
+    <button (click)="loadCharactersAndPlanets()">
+      Load Characters and Planets
+    </button>
+  </div>
 
+  <div *ngIf="isLoading" class="loader">
+    <p>Loading...</p>
+  </div>
+
+  <div class="results">
+    <h2>Characters and Planets</h2>
+    <ul>
+      <li *ngFor="let result of planetAndCharactersResults$ | async">
+        {{ result }}
+      </li>
+    </ul>
+  </div>
   <!-- Course Card component -->
   <!--<app-course-card></app-course-card>-->
 
