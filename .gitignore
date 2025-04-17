@@ -23,3 +23,22 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea/
+# Node.js files
+node_modules/
+dist/
+*.log
+
+# IDE specific files (exclude cache files from editors like VSCode, IntelliJ, etc.)
+.vscode/
+.idea/
+*.iml
+
+# OS-specific cache files
+.DS_Store
+Thumbs.db
+
+# Temporary or cache files
+*.temp
+*.cache
+*.bak
+*.swp
