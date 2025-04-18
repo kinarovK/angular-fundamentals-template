@@ -10,9 +10,11 @@ import { mockedAuthorsList } from "../../../shared/mocks/mocks"; // Adjust path 
   styleUrls: ["./course-form.component.scss"],
 })
 export class CourseFormComponent implements OnInit {
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
-    library.addIconPacks(fas);
-    this.totalAuthors = [...mockedAuthorsList]; // Clone to avoid mutating original
+  constructor(public fb: FormBuilder) {
+    this.totalAuthors = mockedAuthorsList.map((author) => ({
+      ...author,
+      id: author.id.toString(),
+    }));
   }
 
   courseForm!: FormGroup;
