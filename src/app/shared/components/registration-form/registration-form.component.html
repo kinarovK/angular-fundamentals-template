@@ -31,8 +31,8 @@
           type="text"
           id="email"
           formControlName="email"
+          emailValidator
           placeholder="Enter your Email"
-          appEmailValidator
         />
         <span
           *ngIf="registrationForm.controls['email']?.errors?.['required'] && registrationForm.controls['email']?.touched"

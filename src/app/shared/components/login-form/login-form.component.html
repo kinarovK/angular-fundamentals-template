@@ -1,6 +1,6 @@
 <h2 class="text-align-center">Login</h2>
 <div class="app-plate">
-  <form #loginForm="ngForm">
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="login-form">
       <!-- Email Input Field -->
       <div class="form__control">
@@ -9,7 +9,7 @@
           type="text"
           id="email"
           name="email"
-          ngModel
+          [(ngModel)]="email"
           placeholder="Enter your email"
           required
           emailValidator
@@ -18,7 +18,8 @@
         <span
           *ngIf="loginForm.controls['email']?.errors?.['required'] && loginForm.controls['email']?.touched"
           class="text-danger"
-          >Email is required.</span
+        >
+          Email is required.</span
         >
         <span
           *ngIf="loginForm.controls['email']?.errors?.['invalidEmail'] && !loginForm.controls['email']?.errors?.['required']"
@@ -35,7 +36,7 @@
           type="password"
           id="password"
           name="password"
-          ngModel
+          [(ngModel)]="password"
           placeholder="Enter your password"
           required
         />
@@ -56,7 +57,7 @@
         ></app-button>
       </div>
 
-      <!-- Helper Text -->
+      <!-- Registration info -->
       <div class="form__text">
         If you don't have an account you may
         <a routerLink="/RegistrationFormComponent"

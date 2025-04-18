@@ -1,86 +1,89 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import { mockedAuthorsList } from "../../../shared/mocks/mocks"; // Adjust path as needed
 
 @Component({
   selector: "app-course-form",
   templateUrl: "./course-form.component.html",
   styleUrls: ["./course-form.component.scss"],
 })
-export class CourseFormComponent {
+export class CourseFormComponent implements OnInit {
   constructor(public fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);
+    this.totalAuthors = [...mockedAuthorsList]; // Clone to avoid mutating original
   }
 
   courseForm!: FormGroup;
-  availableAuthors: { id: number; name: string }[] = [
-    // Initial set of authors
-    { id: 1, name: "Author One" },
-    { id: 2, name: "Author Two" },
-  ];
-  courseAuthors: { id: number; name: string }[] = []; // Empty initially
+  totalAuthors: { id: string; name: string }[]; // All authors from mock
+  courseAuthors: { id: string; name: string }[] = []; // Not used anymore, replaced by FormArray
 
-  // Initialize the form
+  ngOnInit() {
+    this.createCourseForm();
+  }
+
   createCourseForm() {
     this.courseForm = this.fb.group({
       title: ["", [Validators.required, Validators.minLength(2)]],
       description: ["", [Validators.required, Validators.minLength(2)]],
-      authors: this.fb.array([]), // FormArray for authors management
+      authors: this.fb.array([]), // FormArray for course authors
       newAuthor: this.fb.group({
         name: [
           "",
           [Validators.minLength(2), Validators.pattern("^[a-zA-Z0-9 ]+$")],
         ],
       }),
-      duration: [null, [Validators.required, Validators.min(0)]], // Minutes, must be >= 0
+      duration: [null, [Validators.required, Validators.min(0)]],
     });
   }
 
-  // Getter for authors FormArray
   get authors(): FormArray {
     return this.courseForm.get("authors") as FormArray;
   }
 
-  // Add an author to Course Authors List
-  addAuthorToCourse(author: { id: number; name: string }) {
-    const index = this.availableAuthors.findIndex((a) => a.id === author.id);
-    if (index !== -1) {
-      // Move the author from Available Authors to Course Authors
-      this.courseAuthors.push(author);
-      this.availableAuthors.splice(index, 1);
-    }
+  get availableAuthors() {
+    const selectedIds = this.authors.controls.map(
+      (control) => control.value.id
+    );
+    return this.totalAuthors.filter(
+      (author) => !selectedIds.includes(author.id)
+    );
   }
 
-  // Remove an author from Course Authors List
-  removeAuthorFromCourse(author: { id: number; name: string }) {
-    const index = this.courseAuthors.findIndex((a) => a.id === author.id);
-    if (index !== -1) {
-      // Move the author from Course Authors back to Available Authors
-      this.availableAuthors.push(author);
-      this.courseAuthors.splice(index, 1);
-    }
+  addAuthorToCourse(author: { id: string; name: string }) {
+    this.authors.push(
+      this.fb.group({
+        id: [author.id],
+        name: [author.name],
+      })
+    );
   }
 
-  // Create a New Author
+  removeAuthorFromCourse(index: number) {
+    this.authors.removeAt(index);
+  }
+
   createAuthor() {
-    const newAuthorName = this.courseForm.get("newAuthor.name")?.value;
-    if (newAuthorName.trim() && this.courseForm.get("newAuthor")?.valid) {
+    const newAuthorName = this.courseForm.get("newAuthor.name")?.value?.trim();
+    if (newAuthorName && this.courseForm.get("newAuthor")?.valid) {
       const newAuthor = {
-        id: Date.now(), // Generate a unique ID
+        id: Date.now().toString(),
         name: newAuthorName,
       };
-      this.availableAuthors.push(newAuthor); // Add to Available Authors
-      this.courseForm.get("newAuthor")?.reset(); // Clear the newAuthor input
+      this.totalAuthors.push(newAuthor);
+      this.courseForm.get("newAuthor")?.reset();
     }
   }
 
-  // Submit the form
   onSubmit() {
     if (this.courseForm.valid) {
-      console.log("Course form submitted:", this.courseForm.value);
+      const formValue = {
+        ...this.courseForm.value,
+      };
+      console.log("Course form submitted:", formValue);
     } else {
-      this.courseForm.markAllAsTouched(); // Show all errors
+      this.courseForm.markAllAsTouched();
     }
   }
 }

@@ -1,5 +1,10 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  EmailValidator,
+} from "@angular/forms";
 
 @Component({
   selector: "app-registration-form",
@@ -10,10 +15,6 @@ export class RegistrationFormComponent {
   registrationForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.createForm();
-  }
-
-  createForm() {
     this.registrationForm = this.fb.group({
       name: ["", [Validators.required, Validators.minLength(6)]],
       email: ["", [Validators.required]],

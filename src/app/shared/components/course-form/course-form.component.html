@@ -1,9 +1,8 @@
-<h2>Create / Edit Course</h2>
+<h2>Course Edit/Create Page</h2>
 
 <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
   <div class="app-plate">
     <div class="course">
-      <!-- Main Information -->
       <h3>Main Info</h3>
 
       <!-- Title -->
@@ -15,18 +14,7 @@
           formControlName="title"
           placeholder="Input title"
         />
-        <span
-          *ngIf="courseForm.controls['title']?.errors?.['required'] && courseForm.controls['title']?.touched"
-          class="text-danger"
-        >
-          Title is required.
-        </span>
-        <span
-          *ngIf="courseForm.controls['title']?.errors?.['minlength'] && courseForm.controls['title']?.touched"
-          class="text-danger"
-        >
-          Title must be at least 2 characters.
-        </span>
+        <!-- Error messages for title -->
       </div>
 
       <!-- Description -->
@@ -38,44 +26,27 @@
           placeholder="Input description"
           rows="4"
         ></textarea>
-        <span
-          *ngIf="courseForm.controls['description']?.errors?.['required'] && courseForm.controls['description']?.touched"
-          class="text-danger"
-        >
-          Description is required.
-        </span>
-        <span
-          *ngIf="courseForm.controls['description']?.errors?.['minlength'] && courseForm.controls['description']?.touched"
-          class="text-danger"
-        >
-          Description must be at least 2 characters.
-        </span>
+        <!-- Error messages for description -->
       </div>
 
-      <!-- Authors -->
       <div class="separator"></div>
       <h3>Authors</h3>
 
-      <!-- Add New Author -->
-      <div class="form__control">
+      <!-- New Author -->
+      <div class="form__control" formGroupName="newAuthor">
         <label for="author">New Author</label>
-        <input type="text" id="author" placeholder="Input author name" />
+        <input
+          type="text"
+          id="author"
+          formControlName="name"
+          placeholder="Input author name"
+        />
         <app-button
+          type="button"
           (click)="createAuthor()"
           buttonText="Create Author"
         ></app-button>
-        <span
-          *ngIf="courseForm.get('newAuthor.name')?.errors?.['minlength'] && courseForm.get('newAuthor.name')?.touched"
-          class="text-danger"
-        >
-          Author name must be at least 2 characters.
-        </span>
-        <span
-          *ngIf="courseForm.get('newAuthor.name')?.errors?.['pattern'] && courseForm.get('newAuthor.name')?.touched"
-          class="text-danger"
-        >
-          Author name should only contain letters and numbers.
-        </span>
+        <!-- Error messages for new author -->
       </div>
 
       <!-- Available Authors -->
@@ -85,6 +56,7 @@
           <li *ngFor="let author of availableAuthors">
             {{ author.name }}
             <app-button
+              type="button"
               (click)="addAuthorToCourse(author)"
               buttonText="Add"
             ></app-button>
@@ -96,10 +68,11 @@
       <div class="course__authors">
         <h4>Course Authors</h4>
         <ul>
-          <li *ngFor="let author of courseAuthors">
-            {{ author.name }}
+          <li *ngFor="let authorCtrl of authors.controls; let i = index">
+            {{ authorCtrl.value.name }}
             <app-button
-              (click)="removeAuthorFromCourse(author)"
+              type="button"
+              (click)="removeAuthorFromCourse(i)"
               buttonText="Delete"
             ></app-button>
           </li>
@@ -110,30 +83,19 @@
       <div class="separator"></div>
       <h3>Duration</h3>
       <div class="form__control">
-        <label for="duration">Duration</label>
+        <label for="duration">Duration (minutes)</label>
         <input
           type="number"
           id="duration"
           formControlName="duration"
-          placeholder="Input duration (minutes)"
+          placeholder="Input duration"
         />
-        <span
-          *ngIf="courseForm.controls['duration']?.errors?.['required'] && courseForm.controls['duration']?.touched"
-          class="text-danger"
-        >
-          Duration is required.
-        </span>
-        <span
-          *ngIf="courseForm.controls['duration']?.errors?.['min'] && courseForm.controls['duration']?.touched"
-          class="text-danger"
-        >
-          Duration cannot be less than 0.
-        </span>
+        <!-- Error messages for duration -->
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Submit Button -->
       <div class="form__action">
-        <app-button [buttonText]="'Submit'"></app-button>
+        <app-button type="submit" buttonText="Submit"></app-button>
       </div>
     </div>
   </div>
