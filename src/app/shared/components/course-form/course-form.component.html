@@ -1,55 +1,118 @@
-<!-- Replace ::text:: with your code -->
 <h2>Create / Edit Course</h2>
-<form>
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
   <div class="app-plate">
     <div class="course">
+      <!-- Main Info -->
       <h3>Main Info</h3>
       <div class="form__control">
         <label for="title">Title</label>
-        <!--Use the name `title` for the form control.-->
-        <input type="text" id="title" placeholder="Input text"/>
-        <span id="titleErrorMessage" class="text-danger">Title is required.</span>
+        <input
+          id="title"
+          type="text"
+          formControlName="title"
+          placeholder="Input text"
+        />
+        <span
+          id="titleErrorMessage"
+          class="text-danger"
+          *ngIf="isControlInvalid('title')"
+        >
+          Title is required and must be at least 2 characters.
+        </span>
       </div>
       <div class="form__control">
         <label for="description">Description</label>
-        <!--Use the name `description` for the form control.-->
         <textarea
           id="description"
-          name="description"
+          formControlName="description"
           placeholder="Input text"
           rows="4"
           cols="5"
         ></textarea>
-        <span id="descriptionErrorMessage" class="text-danger">Description is required.</span>
+        <span
+          id="descriptionErrorMessage"
+          class="text-danger"
+          *ngIf="isControlInvalid('description')"
+        >
+          Description is required and must be at least 2 characters.
+        </span>
       </div>
+
       <div class="separator"></div>
+
+      <!-- Authors -->
       <h3>Authors</h3>
       <div class="form__control">
         <div class="course__flex">
-          <!--Use the name `author` for the form control.-->
-          <input type="text" id="author" placeholder="Input Author Name"/>
-          <app-button id="createAuthor"></app-button>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Input Author Name"
+            [formGroupName]="'newAuthor'"
+          />
+          <button
+            (click)="createAuthor()"
+            [disabled]="!courseForm.get('newAuthor.name')?.valid"
+          >
+            Create Author
+          </button>
         </div>
-        <span id="authorErrorMessage">New author should contain only latin letters and numbers.</span>
-        <div class="course__authors">
-          <!--Use the name `authors` for the form array.-->
-          ::Authors::
+        <span
+          id="authorErrorMessage"
+          class="text-danger"
+          *ngIf="
+            courseForm.get('newAuthor.name')?.invalid &&
+            courseForm.get('newAuthor.name')?.touched
+          "
+        >
+          New author should contain only Latin letters and numbers.
+        </span>
+
+        <div>
+          <h5>Available Authors:</h5>
+          <ul>
+            <li *ngFor="let author of authorsList">
+              {{ author.name }}
+              <button (click)="addAuthor(author)">Add</button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h5>Course Authors:</h5>
+          <ul>
+            <li *ngFor="let author of courseAuthors; let i = index">
+              {{ author.name }}
+              <button (click)="deleteAuthor(i)">Delete</button>
+            </li>
+          </ul>
         </div>
       </div>
+
       <div class="separator"></div>
+
+      <!-- Duration -->
       <h3>Duration</h3>
       <div class="form__control">
         <div class="course__flex">
-          <!--Use the name `duration` for the form array.-->
-          <input type="number" id="duration" placeholder="Input duration"/>
-          <div class="course__duration">
-            ::Duration::
-          </div>
+          <input
+            id="duration"
+            type="number"
+            formControlName="duration"
+            placeholder="Input duration"
+          />
         </div>
-        <span id="durationErrorMessage" class="text-danger">Duration is required.</span>
+        <span
+          id="durationErrorMessage"
+          class="text-danger"
+          *ngIf="isControlInvalid('duration')"
+        >
+          Duration should be 0 or greater.
+        </span>
       </div>
+
       <div class="form__action">
-        <app-button></app-button>
+        <button type="submit" [disabled]="courseForm.invalid">Save</button>
       </div>
     </div>
   </div>

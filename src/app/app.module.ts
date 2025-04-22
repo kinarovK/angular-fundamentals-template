@@ -9,6 +9,7 @@ import { CoursesStoreService } from "@app/services/courses-store.service";
 import { CoursesService } from "@app/services/courses.service";
 import { CoursesModule } from "./features/courses/courses.module";
 import { CourseInfoModule } from "./features/course-info/course-info.module";
+import { ReactiveFormsModule } from "@angular/forms";
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -17,6 +18,7 @@ import { CourseInfoModule } from "./features/course-info/course-info.module";
     FontAwesomeModule,
     CoursesModule,
     CourseInfoModule,
+    ReactiveFormsModule,
   ],
   providers: [
     AuthorizedGuard,
