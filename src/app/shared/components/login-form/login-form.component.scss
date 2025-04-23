@@ -1,0 +1,10 @@
+@import 'src/app/shared/styles/styles.scss';
+
+.login-form {
+  width: 260px;
+  gap: 32px;
+  padding: 0 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

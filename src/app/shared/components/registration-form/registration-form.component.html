@@ -1,0 +1,34 @@
+<h2 class="text-align-center">Registration</h2>
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <div class="app-plate">
+    <div class="registration-form">
+      <div class="form__control">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Input text" formControlName="name" required />
+        <div *ngIf="name?.invalid && name?.touched" id="nameErrorMessage" class="text-danger">
+          <div *ngIf="name?.errors?.['required']">Name is required.</div>
+          <div *ngIf="name?.errors?.['minlength']">Name should not be less than 6 symbols.</div>
+        </div>
+      </div>
+      <div class="form__control">
+        <label for="email">Email</label>
+        <input type="text" id="email" placeholder="Input text" formControlName="email" required />
+        <div *ngIf="email?.invalid && email?.touched" id="emailErrorMessage" class="text-danger">
+          <div *ngIf="email?.errors?.['required']">Email is required.</div>
+          <div *ngIf="email?.errors?.['invalidEmail']">Invalid email.</div>
+        </div>
+      </div>
+      <div class="form__control">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Input text" formControlName="password" required
+          appPasswordToggle />
+        <div *ngIf="password?.invalid && password?.touched" id="passwordErrorMessage" class="text-danger">Password is
+          required.</div>
+      </div>
+      <app-button buttonText="Login" class="form__action"></app-button>
+      <div class="form__text">
+        If you have an account you may <strong>Login</strong>
+      </div>
+    </div>
+  </div>
+</form>

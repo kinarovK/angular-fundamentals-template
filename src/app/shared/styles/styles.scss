@@ -1,0 +1,56 @@
+$color-white: #fff;
+$color-gray: #CFCFCF;
+$color-red: #FF0000;
+
+.app-plate {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 477px;
+    background-color: $color-white;
+    border: 1px solid $color-gray;
+    border-radius: 4px;
+    padding: 48px 64px;
+    display: flex;
+    justify-content: center;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.app-error-text {
+    color: $color-red;
+    position: absolute;
+    margin-top: 4px;
+}
+
+.form {
+    &__action {
+        display: flex;
+        justify-content: flex-end;
+        gap: 24px;
+        width: 100%;
+    }
+
+    &__text {
+        text-align: center;
+        flex-wrap: wrap;
+    }
+}
+
+.separator {
+    width: 100%;
+    border-bottom: 1px solid $color-gray;
+}
+
+.text-danger {
+    color: red;
+}
+
+.ng-invalid {
+    border-color: $color-red;
+}
+
+.ng-untouched {
+    border-color: $color-gray;
+}
