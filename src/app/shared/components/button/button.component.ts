@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { fas, IconName, IconPack } from "@fortawesome/free-solid-svg-icons";
 
@@ -13,6 +13,10 @@ export class ButtonComponent {
   }
   @Input() buttonText: string | undefined;
   @Input() iconName: IconName | undefined;
-
+  @Input() type?: "button" | "submit" = "button";
+  @Output() buttonClick = new EventEmitter<void>();
   // Use the names for the inputs `buttonText` and `iconName`.
+  onClick(): void {
+    this.buttonClick.emit();
+  }
 }

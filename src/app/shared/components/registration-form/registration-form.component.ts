@@ -1,33 +1,41 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormBuilder,
+} from "@angular/forms";
+import { emailValidator } from "@app/shared/directives/email.directive";
 @Component({
   selector: "app-registration-form",
   templateUrl: "./registration-form.component.html",
   styleUrls: ["./registration-form.component.scss"],
 })
 export class RegistrationFormComponent {
-  public registrationForm = new FormGroup({
-    name: new FormControl("", [
-      Validators.required,
-      Validators.minLength(6), // Changed from 6 to match error message
-    ]),
-    email: new FormControl("", [
-      Validators.required, // Added required validator
-      Validators.email, // Added email format validator
-    ]),
-    password: new FormControl("", [
-      Validators.required,
-      Validators.minLength(8), // Added password validation
-    ]),
-  });
+  public registrationForm!: FormGroup;
 
-  public handleValue(): void {
-    if (this.registrationForm.valid) {
-      console.log("Form is valid:", this.registrationForm.value);
-    } else {
-      this.registrationForm.markAllAsTouched();
-      alert("Please fix the errors in the form");
-    }
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.registrationForm = this.fb.group({
+      name: ["", [Validators.required, Validators.minLength(6)]],
+      email: ["", [Validators.required, emailValidator()]],
+      password: ["", Validators.required],
+    });
+  }
+  get name() {
+    return this.registrationForm.get("name");
+  }
+
+  get email() {
+    return this.registrationForm.get("email");
+  }
+
+  get password() {
+    return this.registrationForm.get("password");
+  }
+  onSubmit(): void {
+    this.registrationForm.markAllAsTouched();
+    console.log(this.registrationForm.value);
   }
 }

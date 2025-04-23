@@ -1,5 +1,8 @@
 <div class="course-card">
-  <div class="course-card__description">
+  <div
+    class="course-card__description"
+    *ngFor="let course of allCourseArray.reverse()"
+  >
     <!-- Replace ::text:: with your code -->
     <div class="course-card__description-title">{{ title }}</div>
     <div class="course-card__description-text">{{ description }}</div>
@@ -8,7 +11,7 @@
     <div class="course-card__info-text">
       <div>
         <b>Authors: </b>
-        {{ authors?.join(", ") }}
+        {{ authors.join(", ") }}
       </div>
       <div>
         <b>Duration: </b

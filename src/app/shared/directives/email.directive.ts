@@ -1,10 +1,24 @@
 import { Directive } from "@angular/core";
 import {
-  Validator,
   AbstractControl,
-  ValidationErrors,
   NG_VALIDATORS,
+  Validator,
+  ValidationErrors,
+  ValidatorFn,
 } from "@angular/forms";
+
+export function emailValidator(): ValidatorFn {
+  return function validateEmail(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    if (!control.value) {
+      return null;
+    }
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const isValid = emailPattern.test(control.value);
+    return isValid ? null : { invalidEmail: true };
+  };
+}
 
 @Directive({
   selector: "[emailValidator]",
@@ -17,13 +31,7 @@ import {
   ],
 })
 export class EmailValidatorDirective implements Validator {
-  // Add your code here
   validate(control: AbstractControl): ValidationErrors | null {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    const value = control.value;
-    if (value && !emailPattern.test(value)) {
-      return { invalidEmail: true };
-    }
-    return null;
+    return emailValidator()(control);
   }
 }

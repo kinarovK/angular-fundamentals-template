@@ -30,6 +30,8 @@ export class CourseFormComponent {
       }),
     });
   }
+  submitted = false;
+
   courseForm!: FormGroup;
   authorsList: Array<{ id: number; name: string }> = []; // List of all authors
   courseAuthors: Array<{ id: number; name: string }> = []; // Authors added to the course
@@ -39,13 +41,21 @@ export class CourseFormComponent {
   get authors(): FormArray {
     return this.courseForm.get("authors") as FormArray;
   }
-  addAuthor(author: { id: number; name: string }) {
-    // Remove from authorsList and add to courseAuthors
-    this.courseAuthors.push(author);
-    this.authorsList = this.authorsList.filter((a) => a.id !== author.id);
+  addAuthor() {
+    const newAuthorControl = this.courseForm.get("newAuthor");
+    const newAuthorValue = newAuthorControl?.value;
 
-    // Add to authors FormArray
-    this.authors.push(this.fb.control(author));
+    if (
+      newAuthorValue &&
+      typeof newAuthorValue === "string" &&
+      newAuthorValue.trim()
+    ) {
+      const authorControl = this.fb.control(newAuthorValue.trim(), [
+        Validators.required,
+      ]);
+      this.authors.push(authorControl);
+      newAuthorControl.reset();
+    }
   }
 
   deleteAuthor(index: number) {
@@ -81,5 +91,9 @@ export class CourseFormComponent {
 
   onSubmit() {
     console.log("submited");
+  }
+  onCancel() {
+    this.courseForm.reset();
+    this.submitted = false;
   }
 }

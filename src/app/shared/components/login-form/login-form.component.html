@@ -1,6 +1,6 @@
 <h2 class="text-align-center">Login</h2>
 <div class="app-plate">
-  <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <div class="login-form">
       <div>
         <div class="form__control">
@@ -10,23 +10,20 @@
             type="text"
             id="email"
             name="email"
-            [(ngModel)]="email"
             placeholder="Input text"
-            emailValidator
             required
+            emailValidator
+            [(ngModel)]="model.email"
+            #email="ngModel"
           />
-          <span
-            *ngIf="loginForm.controls['email']?.errors?.['required'] && loginForm.controls['email']?.touched"
+          <div
+            *ngIf="email.invalid && email.touched"
+            id="emailErrorMessage"
             class="text-danger"
           >
-            Email is required.</span
-          >
-          <span
-            *ngIf="loginForm.controls['email']?.errors?.['invalidEmail'] && !loginForm.controls['email']?.errors?.['required']"
-            class="text-danger"
-          >
-            Invalid email format!
-          </span>
+            <div *ngIf="email.errors?.['required']">Email is required.</div>
+            <div *ngIf="email.errors?.['invalidEmail']">Invalid email.</div>
+          </div>
         </div>
         <div class="form__control">
           <label for="password">Password</label>
@@ -35,16 +32,18 @@
             type="password"
             id="password"
             name="password"
-            [(ngModel)]="password"
-            placeholder="Input password"
             required
+            placeholder="Input password"
+            [(ngModel)]="model.password"
+            #password="ngModel"
           />
-          <span
-            *ngIf="loginForm.controls['password']?.errors?.['required'] && loginForm.controls['password']?.touched"
+          <div
+            *ngIf="password.invalid && password.touched"
+            id="passwordErrorMessage"
             class="text-danger"
           >
-            Password is required.</span
-          >
+            Password is required.
+          </div>
         </div>
       </div>
       <div>

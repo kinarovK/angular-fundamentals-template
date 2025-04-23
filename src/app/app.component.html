@@ -5,7 +5,7 @@
 <app-header>
   <app-button buttonText="LOGIN"></app-button>
 </app-header>
-<app-search placeholder="Input text"></app-search>
+<app-search></app-search>
 <div class="app-root">
   <app-course-card
     *ngFor="let course of courses"
@@ -23,7 +23,7 @@
   <app-info title="Angular" description="Some description"></app-info>
 
   <!-- Course Card component -->
-
+  <app-course-card></app-course-card>
   <!-- Login Form component -->
   <app-login-form></app-login-form>
 
