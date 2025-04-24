@@ -1,11 +1,6 @@
 import { Component } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormArray,
-  FormControl,
-} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
+import { CoursesService } from "@app/services/courses.service";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 
@@ -15,32 +10,36 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
   styleUrls: ["./course-form.component.scss"],
 })
 export class CourseFormComponent {
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
-    library.addIconPacks(fas);
+  courseForm!: FormGroup;
+  submitted = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private library: FaIconLibrary,
+    private courseService: CoursesService
+  ) {
+    this.library.addIconPacks(fas);
+    this.initializeForm();
+  }
+
+  private initializeForm() {
     this.courseForm = this.fb.group({
       title: ["", [Validators.required, Validators.minLength(2)]],
       description: ["", [Validators.required, Validators.minLength(2)]],
-      authors: this.fb.array([]), // We'll use a FormArray for course authors
-      duration: [0, [Validators.required, Validators.min(0)]],
-      newAuthor: this.fb.group({
-        name: [
-          "",
-          [Validators.pattern("^[a-zA-Z0-9]*$"), Validators.minLength(2)],
-        ],
-      }),
+      creationDate: new Date(),
+      duration: ["", [Validators.required, Validators.min(0)]],
+      authors: this.fb.array([]),
+      newAuthor: [
+        "",
+        [Validators.pattern("[A-Za-z0-9 ]*"), Validators.minLength(2)],
+      ],
     });
   }
-  submitted = false;
-
-  courseForm!: FormGroup;
-  authorsList: Array<{ id: number; name: string }> = []; // List of all authors
-  courseAuthors: Array<{ id: number; name: string }> = []; // Authors added to the course
-  newAuthorId = 1; // Counter for generating author IDs
-  // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
 
   get authors(): FormArray {
     return this.courseForm.get("authors") as FormArray;
   }
+
   addAuthor() {
     const newAuthorControl = this.courseForm.get("newAuthor");
     const newAuthorValue = newAuthorControl?.value;
@@ -59,39 +58,19 @@ export class CourseFormComponent {
   }
 
   deleteAuthor(index: number) {
-    const removedAuthor = this.authors.at(index).value;
-    this.courseAuthors = this.courseAuthors.filter(
-      (a) => a.id !== removedAuthor.id
-    );
-
-    // Add back to authorsList
-    this.authorsList.push(removedAuthor);
     this.authors.removeAt(index);
   }
 
-  createAuthor() {
-    const authorName = this.courseForm.get("newAuthor.name")?.value;
-
-    if (authorName?.invalid) {
-      return; // Do nothing if the name input is invalid
-    }
-    console.log(authorName);
-    const newAuthor = {
-      id: this.newAuthorId++, // Increment unique ID
-      name: authorName,
-    };
-
-    this.authorsList.push(newAuthor);
-    this.courseForm.get("newAuthor.name")?.reset(); // Clear the input field
-  }
-  isControlInvalid(controlName: string): boolean | undefined {
-    const control = this.courseForm.get(controlName);
-    return control?.invalid && (control.touched || control.dirty);
-  }
-
   onSubmit() {
-    console.log("submited");
+    this.submitted = true;
+    if (this.courseForm.valid) {
+      console.log("Form Submitted!", this.courseForm.value);
+      // Handle form submission (e.g., send data to a server)
+    } else {
+      alert("Please fill in all the required fields!");
+    }
   }
+
   onCancel() {
     this.courseForm.reset();
     this.submitted = false;

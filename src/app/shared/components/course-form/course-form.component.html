@@ -2,13 +2,12 @@
 <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
   <div class="app-plate">
     <div class="course">
-      <!-- Main Info -->
       <h3>Main Info</h3>
       <div class="form__control">
         <label for="title">Title</label>
         <input
-          id="title"
           type="text"
+          id="title"
           formControlName="title"
           placeholder="Input text"
         />
@@ -41,7 +40,6 @@
           >Description is required.</span
         >
       </div>
-
       <div class="separator"></div>
       <h3>Duration</h3>
       <div class="form__control">
@@ -66,7 +64,6 @@
           >Duration is required.</span
         >
       </div>
-      <!-- Authors -->
       <h3>Authors</h3>
       <div class="form__control">
         <div class="course__flex">
@@ -98,12 +95,12 @@
           </ul>
         </div>
       </div>
-
       <div class="separator"></div>
-
       <div class="form__action">
         <button type="button" (click)="onCancel()">CANCEL</button>
-        <button type="submit" [disabled]="courseForm.invalid">Save</button>
+        <button type="submit" [disabled]="courseForm.invalid">
+          CREATE COURSE
+        </button>
       </div>
     </div>
   </div>
