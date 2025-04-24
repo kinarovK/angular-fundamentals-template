@@ -19,7 +19,7 @@ export class RegistrationFormComponent {
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
       name: ["", [Validators.required, Validators.minLength(6)]],
-      email: ["", [Validators.required, emailValidator()]],
+      email: ["", [Validators.required]],
       password: ["", Validators.required],
     });
   }

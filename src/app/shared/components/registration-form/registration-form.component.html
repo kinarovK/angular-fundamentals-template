@@ -32,6 +32,7 @@
             placeholder="Input text"
             formControlName="email"
             required
+            emailValidator
           />
           <div
             *ngIf="email?.invalid && email?.touched"
