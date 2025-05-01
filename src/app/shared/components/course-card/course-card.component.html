@@ -1,9 +1,5 @@
 <div class="course-card">
-  <div
-    class="course-card__description"
-    *ngFor="let course of allCourseArray.reverse()"
-  >
-    <!-- Replace ::text:: with your code -->
+  <div class="course-card__description">
     <div class="course-card__description-title">{{ title }}</div>
     <div class="course-card__description-text">{{ description }}</div>
   </div>
@@ -15,19 +11,15 @@
       </div>
       <div>
         <b>Duration: </b
-        ><span class="course-card__duration"
-          >{{ duration | duration }} hours</span
-        >
+        ><span class="course-card__duration">{{ duration | duration }}</span>
       </div>
       <div>
         <b>Created: </b
         ><span class="course-card__date">{{ creationDate | customDate }}</span>
       </div>
     </div>
-    <div class="button-container">
-      <app-button buttonText="Show component"></app-button>
-      <app-button iconName="trash"></app-button>
-      <app-button iconName="edit"></app-button>
+    <div class="course-card__info-actions">
+      <ng-content></ng-content>
     </div>
   </div>
 </div>

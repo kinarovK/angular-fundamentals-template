@@ -1,8 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from "@angular/core";
+import { CanMatchFn, Router } from "@angular/router";
+import { AuthService } from "../services/auth.service";
 
-@Injectable({
-    providedIn: 'root'
-})
-export class AuthorizedGuard {
-    // Add your code here
-}
+export const authorizedGuard: CanMatchFn = () => {
+  const router = inject(Router);
+  const authService = inject(AuthService);
+
+  if (authService.isAuthorised) {
+    return true;
+  }
+
+  return router.parseUrl(authService.getLoginUrl());
+};

@@ -3,10 +3,15 @@ import { Course } from "@app/services/course.model";
 import { CoursesService } from "@app/services/courses.service";
 import { map, pipe } from "rxjs";
 import { mockedCoursesList } from "@app/shared/mocks/mocks";
+import { DurationPipe } from "@app/shared/pipes/duration.pipe";
+import { CustomDatePipe } from "@app/shared/pipes/custom-date.pipe";
+import { ButtonComponent } from "../button/button.component";
 @Component({
   selector: "app-course-card",
   templateUrl: "./course-card.component.html",
   styleUrls: ["./course-card.component.scss"],
+  standalone: true,
+  imports: [DurationPipe, CustomDatePipe, ButtonComponent],
 })
 export class CourseCardComponent {
   @Input() courses: Course[] = mockedCoursesList;

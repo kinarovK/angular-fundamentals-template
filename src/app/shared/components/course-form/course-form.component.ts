@@ -1,13 +1,36 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormArray,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { CoursesService } from "@app/services/courses.service";
-import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
+import {
+  FaIconLibrary,
+  FontAwesomeModule,
+} from "@fortawesome/angular-fontawesome";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import { ButtonComponent } from "../button/button.component";
+import { NgFor, NgIf } from "@angular/common";
+import { DurationPipe } from "@app/shared/pipes/duration.pipe";
 
 @Component({
   selector: "app-course-form",
   templateUrl: "./course-form.component.html",
   styleUrls: ["./course-form.component.scss"],
+  standalone: true,
+  imports: [
+    ButtonComponent,
+    FormsModule,
+    NgIf,
+    ReactiveFormsModule,
+    NgFor,
+    DurationPipe,
+    FontAwesomeModule,
+  ],
 })
 export class CourseFormComponent {
   courseForm!: FormGroup;

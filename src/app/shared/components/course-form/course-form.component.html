@@ -73,9 +73,13 @@
             placeholder="Input Author Name"
             formControlName="newAuthor"
           />
-          <button type="button" id="createAuthor" (click)="addAuthor()">
-            CREATE AUTHOR
-          </button>
+          <app-button
+            buttonText="CREATE AUTHOR"
+            type="button"
+            id="createAuthor"
+            (click)="addAuthor()"
+          >
+          </app-button>
         </div>
         <span
           *ngIf="
@@ -97,10 +101,12 @@
       </div>
       <div class="separator"></div>
       <div class="form__action">
-        <button type="button" (click)="onCancel()">CANCEL</button>
-        <button type="submit" [disabled]="courseForm.invalid">
-          CREATE COURSE
-        </button>
+        <app-button
+          type="button"
+          buttonText="CANCEL"
+          (click)="onCancel()"
+        ></app-button>
+        <app-button type="submit" buttonText="CREATE COURSE"> </app-button>
       </div>
     </div>
   </div>

@@ -2,6 +2,7 @@ import { Pipe } from "@angular/core";
 
 @Pipe({
   name: "duration",
+  standalone: true,
 })
 export class DurationPipe {
   // Add your code here

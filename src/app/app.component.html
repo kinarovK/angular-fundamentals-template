@@ -1,37 +1,9 @@
+<h1>{{ title }}</h1>
 <app-header>
-  <span>{{ text }}</span>
-  <app-button buttonText="LOGOUT"></app-button>
+  <div>{{ userName | async }}</div>
+  <app-button [buttonText]="buttonText" (click)="onButtonClick()"></app-button>
+  <router-outlet></router-outlet>
 </app-header>
-<app-header>
-  <app-button buttonText="LOGIN"></app-button>
-</app-header>
-<app-search></app-search>
 <div class="app-root">
-  <app-course-card
-    *ngFor="let course of courses"
-    [title]="course.title"
-    [description]="course.description"
-    [editable]="course.editable"
-    [authors]="course.authors"
-    [duration]="course.duration"
-    [creationDate]="course.creationDate"
-  >
-  </app-course-card>
-  <!-- Search component -->
-  <!-- Info component -->
-  <app-info title="Angular" description="Some description"></app-info>
-
-  <!-- Course Card component -->
-  <app-course-card></app-course-card>
-  <!-- Login Form component -->
-  <app-login-form></app-login-form>
-
-  <!-- Login Form component -->
-  <app-registration-form></app-registration-form>
-
-  <!-- Login Form component -->
-  <app-course-form></app-course-form>
-
-  <!-- Modal component -->
-  <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->
+  <router-outlet></router-outlet>
 </div>

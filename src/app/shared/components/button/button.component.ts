@@ -1,11 +1,22 @@
+import { NgIf } from "@angular/common";
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
-import { fas, IconName, IconPack } from "@fortawesome/free-solid-svg-icons";
+import {
+  FaIconLibrary,
+  FontAwesomeModule,
+} from "@fortawesome/angular-fontawesome";
+import {
+  faIcons,
+  fas,
+  IconName,
+  IconPack,
+} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: "app-button",
   templateUrl: "./button.component.html",
   styleUrls: ["./button.component.scss"],
+  standalone: true,
+  imports: [FontAwesomeModule, NgIf],
 })
 export class ButtonComponent {
   constructor(library: FaIconLibrary) {
