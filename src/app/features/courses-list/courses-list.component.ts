@@ -8,6 +8,7 @@ import { combineLatestWith } from "rxjs";
 import { ButtonComponent } from "../../shared/components/button/button.component";
 import { CourseCardComponent } from "../../shared/components/course-card/course-card.component";
 import { SearchComponent } from "../../shared/components/search/search.component";
+import { CoursesFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-courses-list",
@@ -26,35 +27,23 @@ import { SearchComponent } from "../../shared/components/search/search.component
 export class CoursesListComponent {
   constructor(
     private router: Router,
-    private coursesStore: CoursesStoreService,
-    private userStore: UserStoreService
+    private userStore: UserStoreService,
+    public coursesFacade: CoursesFacade
   ) {}
 
-  courses: CourseResponse[] = [];
   editable = this.userStore.isAdmin;
+  courses$ = this.coursesFacade.allCourses$;
 
   ngOnInit(): void {
     this.subscribeToServives();
   }
 
   private subscribeToServives(): void {
-    this.coursesStore.courses$
-      .pipe(combineLatestWith(this.coursesStore.authors$))
-      .subscribe(([courses, authors]) => {
-        this.courses = courses.map((course) => ({
-          ...course,
-          authors: authors
-            .filter(({ id }) => course.authors.includes(id))
-            .map(({ name }) => name),
-        }));
-      });
-
-    this.coursesStore.getAll();
-    this.coursesStore.getAllAuthors();
+    this.coursesFacade.getAllCourses();
   }
 
   showCourse(courseId: string): void {
-    this.coursesStore.getCourse(courseId);
+    this.coursesFacade.getSingleCourse(courseId);
     this.router.navigate(["/courses", courseId]);
   }
 
@@ -63,15 +52,16 @@ export class CoursesListComponent {
   }
 
   editCourse(id: string): void {
+    this.coursesFacade.getSingleCourse(id);
     this.router.navigate(["/courses/edit", id]);
   }
 
   deleteCourse(id: string): void {
-    this.coursesStore.deleteCourse(id);
+    this.coursesFacade.deleteCourse(id);
   }
 
   searchCourse(event: string): void {
-    this.coursesStore.filterCourses(event);
+    this.coursesFacade.getFilteredCourses(event);
   }
 
   trackByCourses(index: number, course: CourseResponse): string {

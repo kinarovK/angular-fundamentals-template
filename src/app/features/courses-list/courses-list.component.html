@@ -1,3 +1,4 @@
+<h1>gell</h1>
 <div class="search-group">
   <app-search (searchEvent)="searchCourse($event)"></app-search>
   <ng-container *ngIf="editable">
@@ -6,7 +7,7 @@
 </div>
 <div class="app-courses-list">
   <app-course-card
-    *ngFor="let course of courses; trackBy: trackByCourses"
+    *ngFor="let course of courses$ | async; trackBy: trackByCourses"
     [title]="course.title"
     [description]="course.description"
     [creationDate]="course.creationDate"
